@@ -632,19 +632,22 @@ mod tests {
 
     #[test]
     fn test_challenge_function() {
-        let result = challenge("test input".to_string());
+        let result = handle_challenge("airplane");
+        // This should work with default locations
         assert!(result.is_ok());
     }
 
     #[test]
-    fn test_respond_function() {
-        let result = respond("test input".to_string());
+    fn test_locations_function() {
+        let result = handle_locations();
         assert!(result.is_ok());
     }
 
     #[test]
-    fn test_verify_function() {
-        let result = verify("test input".to_string());
+    fn test_load_locations() {
+        let result = load_locations();
         assert!(result.is_ok());
+        let locations = result.unwrap();
+        assert!(!locations.is_empty());
     }
 }

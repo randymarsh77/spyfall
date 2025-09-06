@@ -32,7 +32,7 @@
           cargo build "$@"
         '';
 
-        test = pkgs.writeShellScriptBin "test" ''
+        run-tests = pkgs.writeShellScriptBin "run-tests" ''
           cargo test "$@"
         '';
 
@@ -55,7 +55,7 @@
             # Aliases for common commands
             spyfall
             build
-            test
+            run-tests
             lint
             format
           ];

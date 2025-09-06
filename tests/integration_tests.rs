@@ -1,4 +1,4 @@
-use spyfall::{handle_challenge, handle_respond, handle_verify};
+use spyfall::handle_challenge;
 
 #[test]
 fn test_cli_commands_exist() {
@@ -12,7 +12,6 @@ fn test_cli_commands_exist() {
 
     println!("Challenge test result: {:?}", result);
 }
-
 #[test]
 fn test_basic_workflow() {
     // This is a placeholder for integration testing
