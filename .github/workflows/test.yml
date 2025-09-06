@@ -1,0 +1,42 @@
+name: Build and Test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    name: Test Suite
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Install Nix
+      uses: cachix/install-nix-action@v24
+      with:
+        github_access_token: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Build and test
+      run: |
+        # Enter nix shell and run all checks
+        nix develop --command bash -c "
+          echo '🔍 Checking code format...'
+          format --check
+          
+          echo '🔍 Running linter...'
+          lint
+          
+          echo '🔨 Building project...'
+          build
+          
+          echo '🧪 Running tests...'
+          test
+          
+          echo '📍 Testing CLI...'
+          spyfall --help
+          spyfall locations
+          
+          echo '✅ All checks passed!'
+        "

@@ -1,0 +1,70 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Install Nix
+      uses: cachix/install-nix-action@v24
+      with:
+        github_access_token: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Setup Nix cache
+      uses: cachix/cachix-action@v12
+      with:
+        name: nix-community
+        authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+        
+    - name: Check Rust formatting
+      run: nix develop --command format --check
+      
+    - name: Run Rust linter
+      run: nix develop --command lint
+      
+    - name: Build project
+      run: nix develop --command build
+      
+    - name: Run tests
+      run: nix develop --command test
+      
+    - name: Test CLI commands
+      run: |
+        nix develop --command spyfall --help
+        nix develop --command spyfall locations
+
+  security:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Install Nix
+      uses: cachix/install-nix-action@v24
+      with:
+        github_access_token: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Run cargo audit (security check)
+      run: |
+        nix develop --command sh -c "
+          cargo install cargo-audit
+          cargo audit
+        "
+        
+    - name: Check for outdated dependencies
+      run: |
+        nix develop --command sh -c "
+          cargo install cargo-outdated
+          cargo outdated --exit-code 1
+        "
+      continue-on-error: true

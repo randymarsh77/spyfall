@@ -1,0 +1,29 @@
+[package]
+name = "spyfall"
+version = "0.1.0"
+edition = "2021"
+description = "A CLI tool for spyfall operations"
+authors = ["Your Name <your.email@example.com>"]
+
+[lib]
+name = "spyfall"
+path = "src/lib.rs"
+
+[[bin]]
+name = "spyfall"
+path = "src/main.rs"
+
+[dependencies]
+clap = { version = "4.0", features = ["derive"] }
+anyhow = "1.0"
+rand = "0.8"
+num-bigint = "0.4"
+num-traits = "0.2"
+num-primes = "0.3"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+sha2 = "0.10"
+aes-gcm = "0.10"
+hex = "0.4"
+base64 = "0.22"
+rayon = "1.8"
